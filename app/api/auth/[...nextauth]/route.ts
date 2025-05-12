@@ -22,7 +22,7 @@ interface DiscordProfile extends Profile {
   email?: string;
 }
 
-export const authOptions = {
+const authOptions = {
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID!,
