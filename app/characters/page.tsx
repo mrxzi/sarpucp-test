@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { UserCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -32,12 +31,10 @@ export default function CharactersPage() {
   const router = useRouter();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [retryCount, setRetryCount] = useState(0);
 
   const fetchCharacters = useCallback(async () => {
     if (!session?.user?.discordId) {
-      setError('No user session found');
       setLoading(false);
       return;
     }
@@ -64,11 +61,9 @@ export default function CharactersPage() {
       }
 
       setCharacters(data.characters);
-      setError('');
       setRetryCount(0);
     } catch (err) {
       console.error('Error fetching characters:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load characters. Please try again.');
       
       if (retryCount < 3) {
         const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
