@@ -1,0 +1,1469 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// Existing table from the game database
+model PlayerUCP {
+  ID         Int     @id @default(autoincrement())
+  ucp        String? @db.VarChar(22)
+  verifycode Int?    @default(0)
+  DiscordID  String? @default("") @db.VarChar(50)
+  password   String? @default("") @db.VarChar(64)
+  salt       String? @default("") @db.VarChar(16)
+  extrac     Int?    @default(0)
+  reedem     Int?    @default(0)
+
+  @@map("playerucp")
+}
+
+model actors {
+  ID       Int     @id @default(autoincrement())
+  Skin     Int?    @default(1)
+  Anim     Int?    @default(0)
+  PosX     Float?  @default(0) @db.Float
+  PosY     Float?  @default(0) @db.Float
+  PosZ     Float?  @default(0) @db.Float
+  PosA     Float?  @default(0) @db.Float
+  Name     String? @db.VarChar(24)
+  World    Int?    @default(0)
+  Interior Int?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model adminlogs {
+  Name     String? @default("N/A") @db.VarChar(64)
+  UCP      String? @default("N/A") @db.VarChar(64)
+  Rank     String? @default("N/A") @db.VarChar(64)
+  Activity String? @default("N/A") @db.VarChar(320)
+  Time     String? @default("N/A") @db.VarChar(320)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model arrestrecord {
+  ID     Int?    @default(-1)
+  Date   String? @db.VarChar(64)
+  Reason String? @db.VarChar(64)
+  Issuer String? @db.VarChar(64)
+
+  @@ignore
+}
+
+model atms {
+  id       Int    @id
+  posx     Float? @db.Float
+  posy     Float? @db.Float
+  posz     Float? @db.Float
+  posrx    Float? @db.Float
+  posry    Float? @db.Float
+  posrz    Float? @db.Float
+  interior Int?   @default(0)
+  world    Int?   @default(0)
+}
+
+model badside_brankas {
+  ID            Int?    @default(-1)
+  fItemID       Int     @id @default(autoincrement())
+  fItemName     String? @db.VarChar(32)
+  fItemModel    Int?    @default(0)
+  fItemQuantity Int?    @default(0)
+}
+
+model bengkel_brankas {
+  PID      Int?   @default(0)
+  ID       Int    @id @default(autoincrement())
+  Item     String @default("-") @db.VarChar(64)
+  Model    Int?   @default(0)
+  Quantity Int?   @default(0)
+}
+
+model bike_rentals {
+  RentID       Int    @id @default(-1)
+  RentalX      Float? @default(0) @db.Float
+  RentalY      Float? @default(0) @db.Float
+  RentalZ      Float? @default(0) @db.Float
+  RentSpawnX   Float? @default(0) @db.Float
+  RentSpawnY   Float? @default(0) @db.Float
+  RentSpawnZ   Float? @default(0) @db.Float
+  RentSpawnA   Float? @default(0) @db.Float
+  RentType     Int?   @default(1)
+  RentTime     Int?   @default(0)
+  RentInterior Int?   @default(-1)
+  RentVW       Int?   @default(-1)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model blacklist_players {
+  PID                  Int?    @default(-1)
+  PoliceIssuer         String? @default("") @db.VarChar(64)
+  PoliceIssuerRank     String? @default("") @db.VarChar(64)
+  PoliceReason         String? @default("") @db.VarChar(320)
+  PoliceDuration       Int?    @default(0)
+  PemerintahIssuer     String? @default("") @db.VarChar(64)
+  PemerintahIssuerRank String? @default("") @db.VarChar(64)
+  PemerintahReason     String? @default("") @db.VarChar(320)
+  PemerintahDuration   Int?    @default(0)
+  EMSIssuer            String? @default("") @db.VarChar(64)
+  EMSIssuerRank        String? @default("") @db.VarChar(64)
+  EMSReason            String? @default("") @db.VarChar(320)
+  EMSDuration          Int?    @default(0)
+  BengkelIssuer        String? @default("") @db.VarChar(64)
+  BengkelIssuerRank    String? @default("") @db.VarChar(64)
+  BengkelReason        String? @default("") @db.VarChar(320)
+  BengkelDuration      Int?    @default(0)
+  PedagangIssuer       String? @default("") @db.VarChar(64)
+  PedagangIssuerRank   String? @default("") @db.VarChar(64)
+  PedagangReason       String? @default("") @db.VarChar(320)
+  PedagangDuration     Int?    @default(0)
+
+  @@ignore
+}
+
+model brankas_bengkel {
+  id        Int  @id @default(0)
+  RepairKit Int? @default(0)
+  ToolsKit  Int? @default(0)
+}
+
+model brankas_ems {
+  id         Int  @id @default(0)
+  moneysamd  Int? @default(0)
+  medkit     Int? @default(0)
+  pillstress Int? @default(0)
+  bandage    Int? @default(0)
+}
+
+model brankas_gojek {
+  id         Int  @id @default(0)
+  moneygojek Int? @default(0)
+}
+
+model brankas_lounges {
+  id            Int     @id @default(0)
+  sambal        BigInt? @default(0)
+  beras         BigInt? @default(0)
+  gula          BigInt? @default(0)
+  garam         BigInt? @default(0)
+  ikan          BigInt? @default(0)
+  ayamfillet    BigInt? @default(0)
+  susuolahan    BigInt? @default(0)
+  airmineral    BigInt? @default(0)
+  nasigoreng    BigInt? @default(0)
+  bakso         BigInt? @default(0)
+  nasipecel     BigInt? @default(0)
+  buburpedas    BigInt? @default(0)
+  susufresh     BigInt? @default(0)
+  esteh         BigInt? @default(0)
+  kopikenangan  BigInt? @default(0)
+  cochomatcha   BigInt? @default(0)
+  moneypedagang Int?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model brankas_police {
+  id        Int? @default(0)
+  sapdmoney Int? @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model bulletin {
+  ID      Int?
+  Date    String? @default("N/A") @db.VarChar(64)
+  Text    String? @default("N/A") @db.VarChar(128)
+  Issuer  String? @default("N/A") @db.VarChar(24)
+  Suspect String? @default("N/A") @db.VarChar(24)
+
+  @@ignore
+}
+
+model business {
+  ID       Int     @id
+  Owner    String? @db.VarChar(64)
+  Name     String? @db.VarChar(128)
+  Money    Int?
+  Type     Int?
+  Stock    Int?
+  Price0   Int?
+  Price1   Int?
+  Price2   Int?
+  Price3   Int?
+  Price4   Int?
+  Price5   Int?
+  Price6   Int?
+  Price7   Int?
+  Price8   Int?
+  Price9   Int?
+  Price10  Int?
+  World    Int?
+  Interior Int?
+  pointX   Float?  @db.Float
+  pointY   Float?  @db.Float
+  pointZ   Float?  @db.Float
+}
+
+model buttons {
+  ID        Int    @id
+  Faction   Int?   @default(0)
+  Faction2  Int?   @default(0)
+  Family    Int?   @default(-1)
+  Owner     Int?   @default(-1)
+  DoorModel Int?   @default(0)
+  World     Int?   @default(0)
+  Interior  Int?   @default(0)
+  Speed     Float? @default(0) @db.Float
+  ButtonX   Float? @default(0) @db.Float
+  ButtonY   Float? @default(0) @db.Float
+  ButtonZ   Float? @default(0) @db.Float
+  ButtonRX  Float? @default(0) @db.Float
+  ButtonRY  Float? @default(0) @db.Float
+  ButtonRZ  Float? @default(0) @db.Float
+  DoorCX    Float? @default(0) @db.Float
+  DoorCY    Float? @default(0) @db.Float
+  DoorCZ    Float? @default(0) @db.Float
+  DoorCRX   Float? @default(0) @db.Float
+  DoorCRY   Float? @default(0) @db.Float
+  DoorCRZ   Float? @default(0) @db.Float
+  DoorOX    Float? @default(0) @db.Float
+  DoorOY    Float? @default(0) @db.Float
+  DoorOZ    Float? @default(0) @db.Float
+  DoorORX   Float? @default(0) @db.Float
+  DoorORY   Float? @default(0) @db.Float
+  DoorORZ   Float? @default(0) @db.Float
+}
+
+model capres {
+  ID       Int     @id @default(autoincrement())
+  Capres   String? @db.VarChar(50)
+  Cawapres String? @db.VarChar(50)
+  Suara    Int?    @default(0)
+}
+
+model charges {
+  ChargesID     Int    @id @default(autoincrement())
+  ID            Int    @default(-1)
+  Date          String @default("N/A") @db.VarChar(64)
+  Description   String @default("N/A") @db.VarChar(128)
+  Issuer        String @default("N/A") @db.VarChar(64)
+  StatusActived Int    @default(0) @db.TinyInt
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model clothes_wardrobe {
+  IDs          Int?   @default(-1)
+  clothesName  String @default("N/A") @db.VarChar(64)
+  clothesModel Int?   @default(0)
+  acc0_model   Int?   @default(0)
+  acc0_bone    Int?   @default(0)
+  acc0_posX    Float? @default(0) @db.Float
+  acc0_posY    Float? @default(0) @db.Float
+  acc0_posZ    Float? @default(0) @db.Float
+  acc0_posRX   Float? @default(0) @db.Float
+  acc0_posRY   Float? @default(0) @db.Float
+  acc0_posRZ   Float? @default(0) @db.Float
+  acc0_posSX   Float? @default(0) @db.Float
+  acc0_posSY   Float? @default(0) @db.Float
+  acc0_posSZ   Float? @default(0) @db.Float
+  acc1_model   Int?   @default(0)
+  acc1_bone    Int?   @default(0)
+  acc1_posX    Float? @default(0) @db.Float
+  acc1_posY    Float? @default(0) @db.Float
+  acc1_posZ    Float? @default(0) @db.Float
+  acc1_posRX   Float? @default(0) @db.Float
+  acc1_posRY   Float? @default(0) @db.Float
+  acc1_posRZ   Float? @default(0) @db.Float
+  acc1_posSX   Float? @default(0) @db.Float
+  acc1_posSY   Float? @default(0) @db.Float
+  acc1_posSZ   Float? @default(0) @db.Float
+  acc2_model   Int?   @default(0)
+  acc2_bone    Int?   @default(0)
+  acc2_posX    Float? @default(0) @db.Float
+  acc2_posY    Float? @default(0) @db.Float
+  acc2_posZ    Float? @default(0) @db.Float
+  acc2_posRX   Float? @default(0) @db.Float
+  acc2_posRY   Float? @default(0) @db.Float
+  acc2_posRZ   Float? @default(0) @db.Float
+  acc2_posSX   Float? @default(0) @db.Float
+  acc2_posSY   Float? @default(0) @db.Float
+  acc2_posSZ   Float? @default(0) @db.Float
+  acc3_model   Int?   @default(0)
+  acc3_bone    Int?   @default(0)
+  acc3_posX    Float? @default(0) @db.Float
+  acc3_posY    Float? @default(0) @db.Float
+  acc3_posZ    Float? @default(0) @db.Float
+  acc3_posRX   Float? @default(0) @db.Float
+  acc3_posRY   Float? @default(0) @db.Float
+  acc3_posRZ   Float? @default(0) @db.Float
+  acc3_posSX   Float? @default(0) @db.Float
+  acc3_posSY   Float? @default(0) @db.Float
+  acc3_posSZ   Float? @default(0) @db.Float
+
+  @@ignore
+}
+
+model contacts {
+  ID             Int?    @default(-1)
+  contactID      Int     @id @default(autoincrement())
+  contactName    String? @default("None") @db.VarChar(32)
+  contactNumber  String  @default("-") @db.VarChar(64)
+  contactOwner   Int?    @default(-1)
+  contactUnread  Int?    @default(0)
+  contactBlocked Int?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model crimebroadcast {
+  ID     Int?
+  Date   String? @default("-") @db.VarChar(64)
+  Text   String? @default("-") @db.VarChar(128)
+  Sender String? @default("-") @db.VarChar(64)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model criminallogs {
+  OwnerID Int?
+  Sender  String? @default("Unknows") @db.VarChar(24)
+  History String? @db.VarChar(128)
+  Time    String? @db.VarChar(64)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model damagelogs {
+  IDs       Int?    @default(-1)
+  dWeapon   Int?    @default(0)
+  dBodyPart Int?    @default(0)
+  dAmount   Float?  @default(0) @db.Float
+  dIssuer   String? @default("-") @db.VarChar(64)
+  dTime     String? @default("-") @db.VarChar(64)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model discordlog {
+  Admin  String? @db.VarChar(50)
+  Action String? @db.VarChar(100)
+  Tujuan String? @db.VarChar(50)
+
+  @@ignore
+}
+
+model doors {
+  ID       Int     @id
+  name     String? @default("None") @db.VarChar(50)
+  password String? @default("") @db.VarChar(50)
+  icon     Int?    @default(19130)
+  mapicon  Int?    @default(0) @db.TinyInt
+  locked   Int?    @default(0)
+  admin    Int?    @default(0)
+  owner    Int?    @default(-1)
+  vip      Int?    @default(0)
+  faction  Int?    @default(0)
+  family   Int?    @default(-1)
+  garage   Int?    @default(0) @db.TinyInt
+  custom   Int?    @default(0)
+  extvw    Int?    @default(0)
+  extint   Int?    @default(0)
+  extposx  Float?  @default(0) @db.Float
+  extposy  Float?  @default(0) @db.Float
+  extposz  Float?  @default(0) @db.Float
+  extposa  Float?  @default(0) @db.Float
+  intvw    Int?    @default(0)
+  intint   Int?    @default(0)
+  intposx  Float?  @default(0) @db.Float
+  intposy  Float?  @default(0) @db.Float
+  intposz  Float?  @default(0) @db.Float
+  intposa  Float?  @default(0) @db.Float
+}
+
+model dropped {
+  ID           Int     @id @default(autoincrement())
+  itemName     String? @default("0") @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemX        Float?  @db.Float
+  itemY        Float?  @db.Float
+  itemZ        Float?  @db.Float
+  itemInt      Int?    @default(0)
+  itemWorld    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+  itemPlayer   String? @db.VarChar(24)
+}
+
+model dynamic_rusun {
+  rID              Int    @id
+  RusunOwner       String @default("N/A") @db.VarChar(64)
+  RusunName        String @default("N/A") @db.VarChar(64)
+  RusunOwnerID     Int?   @default(0)
+  RusunPrice       Int?   @default(0)
+  RusunInterior    Int?   @default(0)
+  RusunExtInterior Int?   @default(0)
+  RusunWorld       Int?   @default(0)
+  ExtPosX          Float? @default(0) @db.Float
+  ExtPosY          Float? @default(0) @db.Float
+  ExtPosZ          Float? @default(0) @db.Float
+  ExtPosA          Float? @default(0) @db.Float
+  IntPosX          Float? @default(0) @db.Float
+  IntPosY          Float? @default(0) @db.Float
+  IntPosZ          Float? @default(0) @db.Float
+  IntPosA          Float? @default(0) @db.Float
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model emergencylog {
+  ID          Int     @default(0)
+  pID         Int
+  Name        String? @default("") @db.VarChar(32)
+  Phone       String? @default("") @db.VarChar(64)
+  Date        Int?    @default(0)
+  Location    String? @default("") @db.VarChar(64)
+  Description String? @default("") @db.VarChar(128)
+
+  @@ignore
+}
+
+model ems_brankas {
+  PID      Int?   @default(0)
+  ID       Int    @id @default(autoincrement())
+  Item     String @default("-") @db.VarChar(64)
+  Model    Int?   @default(0)
+  Quantity Int?   @default(0)
+}
+
+model factiongarage {
+  ID       Int    @id
+  Name     String @default("None") @db.VarChar(258)
+  Type     Int    @default(0)
+  Interior Int    @default(0)
+  World    Int    @default(0)
+  PosX     Float  @default(0) @db.Float
+  PosY     Float  @default(0) @db.Float
+  PosZ     Float  @default(0) @db.Float
+  SpawnX   Float  @default(0) @db.Float
+  SpawnY   Float  @default(0) @db.Float
+  SpawnZ   Float  @default(0) @db.Float
+  SpawnA   Float  @default(0) @db.Float
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model factionlogs {
+  Name    String? @default("N/A") @db.VarChar(64)
+  UCP     String? @default("N/A") @db.VarChar(64)
+  Value   Int?    @default(0)
+  Faction String? @default("N/A") @db.VarChar(64)
+  Time    String? @default("N/A") @db.VarChar(64)
+
+  @@ignore
+}
+
+model families {
+  F_ID             Int     @id @default(-1)
+  F_Name           String? @default("N/A") @db.VarChar(50)
+  F_Leader         String? @default("N/A") @db.VarChar(50)
+  F_Money          Int?    @default(0)
+  F_Icon           Int?    @default(0)
+  F_BrankasX       Float?  @default(0) @db.Float
+  F_BrankasY       Float?  @default(0) @db.Float
+  F_BrankasZ       Float?  @default(0) @db.Float
+  F_BosDeskX       Float?  @default(0) @db.Float
+  F_BosDeskY       Float?  @default(0) @db.Float
+  F_BosDeskZ       Float?  @default(0) @db.Float
+  F_ExtPosX        Float?  @default(0) @db.Float
+  F_ExtPosY        Float?  @default(0) @db.Float
+  F_ExtPosZ        Float?  @default(0) @db.Float
+  F_ExtPosA        Float?  @default(0) @db.Float
+  F_IntPosX        Float?  @default(0) @db.Float
+  F_IntPosY        Float?  @default(0) @db.Float
+  F_IntPosZ        Float?  @default(0) @db.Float
+  F_IntPosA        Float?  @default(0) @db.Float
+  F_Interior       Int?    @default(0)
+  F_Weapon1        Int?    @default(0)
+  F_Weapon2        Int?    @default(0)
+  F_Weapon3        Int?    @default(0)
+  F_Weapon4        Int?    @default(0)
+  F_Weapon5        Int?    @default(0)
+  F_Ammo1          Int?    @default(0)
+  F_Ammo2          Int?    @default(0)
+  F_Ammo3          Int?    @default(0)
+  F_Ammo4          Int?    @default(0)
+  F_Ammo5          Int?    @default(0)
+  F_RedMoney       Int?    @default(0)
+  F_GarageX        Float?  @default(0) @db.Float
+  F_GarageY        Float?  @default(0) @db.Float
+  F_GarageZ        Float?  @default(0) @db.Float
+  F_GarageSpawnX   Float?  @default(0) @db.Float
+  F_GarageSpawnY   Float?  @default(0) @db.Float
+  F_GarageSpawnZ   Float?  @default(0) @db.Float
+  F_GarageSpawnA   Float?  @default(0) @db.Float
+  F_GarageWorld    Int?    @default(0)
+  F_GarageInterior Int?    @default(0)
+}
+
+model families_garage {
+  ID                Int    @id @default(0)
+  gFamiliesID       Int    @default(0)
+  gFamiliesName     String @default("N/A") @db.VarChar(64)
+  gFamiliesPOSX     Float  @default(0) @db.Float
+  gFamiliesPOSY     Float  @default(0) @db.Float
+  gFamiliesPOSZ     Float  @default(0) @db.Float
+  gFamiliesSpawnX   Float  @default(0) @db.Float
+  gFamiliesSpawnY   Float  @default(0) @db.Float
+  gFamiliesSpawnZ   Float  @default(0) @db.Float
+  gFamiliesSpawnA   Float  @default(0) @db.Float
+  gFamiliesInterior Int    @default(-1)
+  gFamiliesWorld    Int    @default(-1)
+  gFamiliesPickup   Int    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model familieslogs {
+  Name     String? @db.VarChar(64)
+  UCP      String? @db.VarChar(64)
+  Activity String? @db.VarChar(320)
+  Families String? @db.VarChar(100)
+  Time     String? @db.VarChar(100)
+
+  @@ignore
+}
+
+model gate {
+  ID      Int    @id
+  Model   Int?   @default(0)
+  Faction Int?   @default(0)
+  Family  Int?   @default(-1)
+  House   Int?   @default(-1)
+  Owner   Int?   @default(-1)
+  Speed   Float? @default(0) @db.Float
+  cX      Float? @default(0) @db.Float
+  cY      Float? @default(0) @db.Float
+  cZ      Float? @default(0) @db.Float
+  cRX     Float? @default(0) @db.Float
+  cRY     Float? @default(0) @db.Float
+  cRZ     Float? @default(0) @db.Float
+  oX      Float? @default(0) @db.Float
+  oY      Float? @default(0) @db.Float
+  oZ      Float? @default(0) @db.Float
+  oRX     Float? @default(0) @db.Float
+  oRY     Float? @default(0) @db.Float
+  oRZ     Float? @default(0) @db.Float
+}
+
+model gudang {
+  GudangID       Int     @id
+  GudangName     String? @default("-") @db.VarChar(64)
+  GudangPrice    Int?    @default(0)
+  GudangX        Float?  @default(0) @db.Float
+  GudangY        Float?  @default(0) @db.Float
+  GudangZ        Float?  @default(0) @db.Float
+  GudangInterior Int?
+  GudangWorld    Int?
+}
+
+model house {
+  ID                 Int    @id
+  HS_Owner           String @default("-") @db.VarChar(50)
+  HS_OwnerID         Int?   @default(-1)
+  HS_Type            Int?   @default(0)
+  HS_Claimed         Int?   @default(0)
+  HS_ExtPosX         Float? @default(0) @db.Float
+  HS_ExtPosY         Float? @default(0) @db.Float
+  HS_ExtPosZ         Float? @default(0) @db.Float
+  HS_ExtPosA         Float? @default(0) @db.Float
+  HS_IntPosX         Float? @default(0) @db.Float
+  HS_IntPosY         Float? @default(0) @db.Float
+  HS_IntPosZ         Float? @default(0) @db.Float
+  HS_IntPosA         Float? @default(0) @db.Float
+  HS_Capacity        Float? @default(0) @db.Float
+  HS_Interior        Int?   @default(0)
+  HS_Weapon1         Int?   @default(0)
+  HS_Weapon2         Int?   @default(0)
+  HS_Weapon3         Int?   @default(0)
+  HS_Weapon4         Int?   @default(0)
+  HS_Weapon5         Int?   @default(0)
+  HS_Ammo1           Int?   @default(0)
+  HS_Ammo2           Int?   @default(0)
+  HS_Ammo3           Int?   @default(0)
+  HS_Ammo4           Int?   @default(0)
+  HS_Ammo5           Int?   @default(0)
+  HS_GarageX         Float? @default(0) @db.Float
+  HS_GarageY         Float? @default(0) @db.Float
+  HS_GarageZ         Float? @default(0) @db.Float
+  HS_GarageSpawnX    Float? @default(0) @db.Float
+  HS_GarageSpawnY    Float? @default(0) @db.Float
+  HS_GarageSpawnZ    Float? @default(0) @db.Float
+  HS_GarageSpawnA    Float? @default(0) @db.Float
+  HS_GarageInterior  Int?   @default(0)
+  HS_GarageWorld     Int?   @default(0)
+  HS_HelipadX        Float? @default(0) @db.Float
+  HS_HelipadY        Float? @default(0) @db.Float
+  HS_HelipadZ        Float? @default(0) @db.Float
+  HS_HelipadSpawnX   Float? @default(0) @db.Float
+  HS_HelipadSpawnY   Float? @default(0) @db.Float
+  HS_HelipadSpawnZ   Float? @default(0) @db.Float
+  HS_HelipadSpawnA   Float? @default(0) @db.Float
+  HS_HelipadInterior Int?   @default(0)
+  HS_HelipadWorld    Int?   @default(0)
+  HS_BrankasX        Float? @default(0) @db.Float
+  HS_BrankasY        Float? @default(0) @db.Float
+  HS_BrankasZ        Float? @default(0) @db.Float
+}
+
+model house_garkot {
+  id       Int   @id @default(0)
+  GHouseID Int   @default(-1)
+  posx     Float @default(0) @db.Float
+  posy     Float @default(0) @db.Float
+  posz     Float @default(0) @db.Float
+  spawnx   Float @default(0) @db.Float
+  spawny   Float @default(0) @db.Float
+  spawnz   Float @default(0) @db.Float
+  spawna   Float @default(0) @db.Float
+  interior Float @default(0) @db.Float
+  world    Float @default(0) @db.Float
+}
+
+model hunting {
+  DeerID       Int    @id @default(-1)
+  DeerX        Float? @default(0) @db.Float
+  DeerY        Float? @default(0) @db.Float
+  DeerZ        Float? @default(0) @db.Float
+  DeerRX       Float? @default(0) @db.Float
+  DeerRY       Float? @default(0) @db.Float
+  DeerRZ       Float? @default(0) @db.Float
+  DeerInterior Int?
+  DeerWorld    Int?
+  DeerTime     Int?
+}
+
+model iconmaps {
+  ID           Int    @id
+  IconID       Int?   @default(-1)
+  IconInterior Int?   @default(-1)
+  IconWorld    Int?   @default(-1)
+  IconX        Float? @default(0) @db.Float
+  IconY        Float? @default(0) @db.Float
+  IconZ        Float? @default(0) @db.Float
+}
+
+model icons {
+  iconID        Int    @id @default(autoincrement())
+  iconLocationX Float? @default(0) @db.Float
+  iconLocationY Float? @default(0) @db.Float
+  iconLocationZ Float? @default(0) @db.Float
+  iconInterior  Int?
+  iconWorld     Int?
+  iconType      Int?
+}
+
+model inventory {
+  ID          Int?    @default(0)
+  invID       Int     @id @default(autoincrement())
+  invItem     String? @db.VarChar(32)
+  invModel    Int?    @default(0)
+  invQuantity Int?    @default(0)
+}
+
+model invoices {
+  invoiceID Int     @id @default(autoincrement())
+  Name      String? @default("N/A") @db.VarChar(320)
+  Sender    Int?    @default(-1)
+  Faction   Int?    @default(0)
+  Cost      Int?    @default(0)
+  Owner     Int?    @default(-1)
+}
+
+model label_fivem {
+  LabelID       Int    @id
+  LabelText     String @default("-") @db.VarChar(128)
+  LabelX        Float? @default(0) @db.Float
+  LabelY        Float? @default(0) @db.Float
+  LabelZ        Float? @default(0) @db.Float
+  LabelRX       Float? @default(0) @db.Float
+  LabelRY       Float? @default(0) @db.Float
+  LabelRZ       Float? @default(0) @db.Float
+  LabelInterior Int?   @default(-1)
+  LabelWorld    Int?   @default(-1)
+}
+
+model ladang {
+  id           Int    @id
+  kanabisX     Float? @db.Float
+  kanabisY     Float? @db.Float
+  kanabisZ     Float? @db.Float
+  kanabisRX    Float? @db.Float
+  kanabisRY    Float? @db.Float
+  kanabisRZ    Float? @db.Float
+  interior     Int?   @default(0)
+  world        Int?   @default(0)
+  kanabisTimer Int?   @default(0)
+}
+
+model loglogin {
+  no       Int    @id @default(autoincrement())
+  username String @default("None") @db.VarChar(40)
+  reg_id   Int    @default(0)
+  password String @default("None") @db.VarChar(40)
+  time     String @db.VarChar(40)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model logpay {
+  player     String @default("None") @db.VarChar(40)
+  playerid   Int    @default(0)
+  toplayer   String @default("None") @db.VarChar(40)
+  toplayerid Int    @default(0)
+  ammount    Int    @default(0)
+  time       BigInt
+
+  @@ignore
+}
+
+model lumbung {
+  id    Int @id @default(0)
+  stock Int @default(100)
+}
+
+model objects {
+  ID             Int    @id
+  Model          Int?
+  ObjectX        Float? @db.Float
+  ObjectY        Float? @db.Float
+  ObjectZ        Float? @db.Float
+  ObjectRX       Float? @db.Float
+  ObjectRY       Float? @db.Float
+  ObjectRZ       Float? @db.Float
+  ObjectInterior Int?   @default(0)
+  ObjectWorld    Int?   @default(0)
+}
+
+model objecttext {
+  ID        Int    @id @default(autoincrement())
+  Text      String @default("Text") @db.VarChar(128)
+  PosX      Float? @default(0) @db.Float
+  PosY      Float? @default(0) @db.Float
+  PosZ      Float? @default(0) @db.Float
+  posRX     Float? @default(0) @db.Float
+  posRY     Float? @default(0) @db.Float
+  posRZ     Float? @default(0) @db.Float
+  Vw        Int?   @default(0)
+  Int       Int?   @default(0)
+  FontColor Int?   @default(-1)
+  BackColor Int?   @default(-1)
+  FontSize  Int?   @default(100)
+  FontNames String @default("Arial") @db.VarChar(24)
+  Model     Int?   @default(18244)
+}
+
+model pasar {
+  id       Int    @id
+  posx     Float? @default(0) @db.Float
+  posy     Float? @default(0) @db.Float
+  posz     Float? @default(0) @db.Float
+  type     Int?   @default(0)
+  interior Int?   @default(0)
+  world    Int?   @default(0)
+}
+
+model pemerintah_brankas {
+  PID      Int?   @default(0)
+  ID       Int    @id @default(autoincrement())
+  Item     String @default("-") @db.VarChar(64)
+  Model    Int?   @default(0)
+  Quantity Int?   @default(0)
+}
+
+model player_bans {
+  id                      Int     @id @default(autoincrement()) @db.UnsignedInt
+  name                    String? @default("None") @db.VarChar(24)
+  ip                      String? @default("None") @db.VarChar(24)
+  longip                  Int?    @default(0)
+  ban_expire              BigInt? @default(0)
+  ban_date                BigInt? @default(0)
+  last_activity_timestamp BigInt? @default(0)
+  admin                   String? @default("Server") @db.VarChar(40)
+  reason                  String? @default("None") @db.VarChar(128)
+}
+
+model player_characters {
+  pID                   Int     @id @default(autoincrement()) @db.UnsignedInt
+  Char_RegisterDate     String? @default("") @db.VarChar(30)
+  Char_LastLogin        String? @default("") @db.VarChar(30)
+  Char_Name             String? @default("") @db.VarChar(24)
+  Char_AdminName        String? @default("None") @db.VarChar(24)
+  Char_AdminRankName    String? @default("NULL") @db.VarChar(64)
+  Char_AdminPoint       Int?    @default(0) @db.UnsignedInt
+  Char_IP               String? @default("") @db.VarChar(24)
+  Char_OnlineTimer      Int?    @default(0) @db.UnsignedInt
+  Char_TheStars         Int?    @default(0) @db.UnsignedTinyInt
+  Char_TheStarsTime     BigInt? @default(0) @db.UnsignedBigInt
+  Char_Admin            Int?    @default(0) @db.UnsignedTinyInt
+  Char_AdminToggle      Int?    @default(1) @db.UnsignedTinyInt
+  Char_Spy              Int?    @default(0) @db.UnsignedInt
+  Char_Level            Int?    @default(1) @db.UnsignedInt
+  Char_LevelUp          Int?    @default(0) @db.UnsignedInt
+  Char_Vip              Int?    @default(0) @db.UnsignedTinyInt
+  Char_VipTime          BigInt? @default(0) @db.UnsignedBigInt
+  Char_VipName          String? @default("-") @db.VarChar(256)
+  Char_ClaimSP          Int?    @default(0)
+  Char_Money            Int?    @default(0)
+  Char_RedMoney         Int?    @default(0)
+  Char_BankMoney        Int?    @default(0)
+  Char_Gopay            Int?    @default(0)
+  Char_BankRek          Int?    @default(0) @db.UnsignedMediumInt
+  Char_BankPin          Int?    @default(0) @db.UnsignedInt
+  Char_PhoneNum         String? @default("-") @db.VarChar(50)
+  Char_PhoneOff         Int?    @default(1)
+  Char_PhoneBattery     Int?    @default(100)
+  Char_Hours            Int?    @default(0) @db.UnsignedInt
+  Char_Minutes          Int?    @default(0) @db.UnsignedInt
+  Char_Seconds          Int?    @default(0) @db.UnsignedInt
+  Char_Payday           Int?    @default(0) @db.UnsignedInt
+  Char_Skin             Int?    @default(0) @db.UnsignedSmallInt
+  Char_Gender           Int?    @default(0) @db.UnsignedTinyInt
+  Char_Age              String? @default("") @db.VarChar(30)
+  Char_Origin           String? @default("None") @db.VarChar(128)
+  Char_BodyHeight       Int?    @default(0) @db.MediumInt
+  Char_BodyWeight       Int?    @default(0) @db.MediumInt
+  Char_InDoor           Int?    @default(-1) @db.MediumInt
+  Char_InHouse          Int?    @default(-1) @db.MediumInt
+  Char_InRusun          Int?    @default(-1) @db.MediumInt
+  Char_InBiz            Int?    @default(-1) @db.MediumInt
+  Char_InFamily         Int?    @default(-1) @db.MediumInt
+  Char_PosX             Float?  @default(0) @db.Float
+  Char_PosY             Float?  @default(0) @db.Float
+  Char_PosZ             Float?  @default(0) @db.Float
+  Char_PosA             Float?  @default(0) @db.Float
+  Char_IntID            Int?    @default(0) @db.UnsignedInt
+  Char_WID              Int?    @default(0) @db.UnsignedInt
+  Char_Health           Float?  @default(100) @db.Float
+  Char_Armour           Float?  @default(0) @db.Float
+  Char_Hunger           Int?    @default(100)
+  Char_Thirst           Int?    @default(100)
+  Char_Stress           Int?    @default(100)
+  Char_KnockDown        Int?    @default(0) @db.UnsignedTinyInt
+  Char_KnockTime        Int?    @default(0)
+  Char_Faction          Int?    @default(0) @db.UnsignedTinyInt
+  Char_FactionRank      Int?    @default(0) @db.UnsignedTinyInt
+  Char_Family           Int?    @default(-1) @db.TinyInt
+  Char_FamilyRank       Int?    @default(0) @db.UnsignedTinyInt
+  Char_Jail             Int?    @default(0) @db.UnsignedInt
+  Char_JailTime         Int?    @default(0) @db.UnsignedInt
+  Char_JailReason       String? @default("None") @db.VarChar(126)
+  Char_JailBy           String? @default("Server") @db.VarChar(64)
+  Char_Arrest           Int?    @default(0)
+  Char_ArrestTime       Int?    @default(0)
+  Char_Uniform          Int?    @default(0)
+  Char_UsingUniform     Int?    @default(0)
+  Char_AskTime          Int?    @default(0) @db.UnsignedInt
+  Char_Warn             Int?    @default(0) @db.UnsignedTinyInt
+  Char_Job              Int?    @default(0) @db.UnsignedTinyInt
+  Char_JobExitTime      Int?    @default(0) @db.UnsignedInt
+  Char_MowerTime        Int?    @default(0) @db.UnsignedInt
+  Char_Helmet           Int?    @default(0) @db.UnsignedTinyInt
+  Char_TogPM            Int?    @default(0) @db.UnsignedTinyInt
+  Char_TogGlobal        Int?    @default(1) @db.UnsignedTinyInt
+  Char_Render           Float?  @default(0) @db.Float
+  Char_RenderValue      Int?    @default(0) @db.UnsignedInt
+  Char_XmasGift         BigInt? @default(0) @db.UnsignedBigInt
+  Char_SKWB             Int?    @default(0) @db.UnsignedInt
+  Char_SKWBTime         BigInt? @default(0) @db.UnsignedBigInt
+  Char_CallRingtone     String? @default("None") @db.VarChar(128)
+  Char_NotifStyle       Int?    @default(1) @db.TinyInt
+  Char_AirplaneMode     Int?    @default(1) @db.TinyInt
+  Char_HUDMode          Int?    @default(1) @db.TinyInt
+  Char_HudColor         Int?    @default(-92245249)
+  Char_UrineTime        BigInt? @default(0)
+  Char_Online           Int?    @default(0) @db.TinyInt
+  Char_VotePilkada      Int?    @default(0) @db.TinyInt
+  Char_Boombox          Int?    @default(0) @db.TinyInt
+  Char_Streamer         Int?    @db.TinyInt
+  Gun1                  Int?    @default(0) @db.UnsignedInt
+  Gun2                  Int?    @default(0) @db.UnsignedInt
+  Gun3                  Int?    @default(0) @db.UnsignedInt
+  Gun4                  Int?    @default(0) @db.UnsignedInt
+  Gun5                  Int?    @default(0) @db.UnsignedInt
+  Gun6                  Int?    @default(0) @db.UnsignedInt
+  Gun7                  Int?    @default(0) @db.UnsignedInt
+  Gun8                  Int?    @default(0) @db.UnsignedInt
+  Gun9                  Int?    @default(0) @db.UnsignedInt
+  Gun10                 Int?    @default(0) @db.UnsignedInt
+  Gun11                 Int?    @default(0) @db.UnsignedInt
+  Gun12                 Int?    @default(0) @db.UnsignedInt
+  Gun13                 Int?    @default(0) @db.UnsignedInt
+  Ammo1                 Int?    @default(0) @db.UnsignedInt
+  Ammo2                 Int?    @default(0) @db.UnsignedInt
+  Ammo3                 Int?    @default(0) @db.UnsignedInt
+  Ammo4                 Int?    @default(0) @db.UnsignedInt
+  Ammo5                 Int?    @default(0) @db.UnsignedInt
+  Ammo6                 Int?    @default(0) @db.UnsignedInt
+  Ammo7                 Int?    @default(0) @db.UnsignedInt
+  Ammo8                 Int?    @default(0) @db.UnsignedInt
+  Ammo9                 Int?    @default(0) @db.UnsignedInt
+  Ammo10                Int?    @default(0) @db.UnsignedInt
+  Ammo11                Int?    @default(0) @db.UnsignedInt
+  Ammo12                Int?    @default(0) @db.UnsignedInt
+  Ammo13                Int?    @default(0) @db.UnsignedInt
+  Char_Head             Int?    @default(0)
+  Char_Stomach          Int?    @default(0)
+  Char_LeftArm          Int?    @default(0)
+  Char_RightArm         Int?    @default(0)
+  Char_LeftFoot         Int?    @default(0)
+  Char_RightFoot        Int?    @default(0)
+  Char_DCTime           BigInt? @default(0)
+  Char_BackpackWeight   Float?  @default(0.000) @db.Float
+  Char_HasGudangID      Int?    @default(-1)
+  Char_HasRusunID       Int?    @default(-1)
+  Char_GudangRentTime   BigInt? @default(0) @db.UnsignedBigInt
+  Char_MaskID           Int?    @default(0)
+  Char_OnDuty           Int?    @default(0) @db.UnsignedTinyInt
+  Char_DutyPD           Int?    @default(0) @db.UnsignedTinyInt
+  Char_DutyPemerintah   Int?    @default(0) @db.UnsignedTinyInt
+  Char_DutyEms          Int?    @default(0) @db.UnsignedTinyInt
+  Char_DutyTrans        Int?    @default(0) @db.UnsignedTinyInt
+  Char_DutyPedagang     Int?    @default(0) @db.UnsignedTinyInt
+  Char_DutyBengkel      Int?    @default(0) @db.UnsignedTinyInt
+  Char_SimA             Int?    @default(0)
+  Char_SimATime         BigInt? @default(0)
+  Char_SimB             Int?    @default(0)
+  Char_SimBTime         BigInt? @default(0)
+  Char_SimC             Int?    @default(0)
+  Char_SimCTime         BigInt? @default(0)
+  Char_WeaponLic        Int?    @default(0)
+  Char_WeaponLicTime    BigInt? @default(0)
+  Char_HuntingLic       Int?    @default(0)
+  Char_HuntingLicTime   BigInt? @default(0)
+  Char_Earphone         Int?    @default(0)
+  Char_Radio            Int?    @default(0)
+  Char_Ktp              Int?    @default(0) @db.TinyInt
+  Char_KtpTime          Int?    @default(0)
+  Char_DownloadWhatsapp Int?    @default(0) @db.TinyInt
+  Char_DownloadGojek    Int?    @default(0) @db.TinyInt
+  Char_DownloadSpotify  Int?    @default(0) @db.TinyInt
+  Char_DownloadTwitter  Int?    @default(0) @db.TinyInt
+  Char_Kompensasi       Int?    @default(0)
+  Char_AdminHide        Int?    @default(0)
+  Char_RusunStorage     Float?  @default(0) @db.Float
+  Char_GudangStorage    Float?  @default(0) @db.Float
+  Char_OwnedHouse       Int?    @default(-1)
+  Char_FriendHouse      Int?    @default(-1)
+  Char_TogAutoEngine    Int?    @default(0)
+  Char_SKS              Int?    @default(0)
+  Char_SKSTime          BigInt? @default(0) @db.UnsignedBigInt
+  Char_SKSNameDoc       String? @default("None") @db.VarChar(128)
+  Char_SKSRankDoc       String? @default("None") @db.VarChar(128)
+  Char_SKSReason        String? @default("None") @db.VarChar(128)
+  Char_SKCK             Int?    @default(0)
+  Char_SKCKTime         BigInt? @default(0)
+  Char_SKCKNamePol      String? @default("None") @db.VarChar(128)
+  Char_SKCKRankPol      String? @default("None") @db.VarChar(128)
+  Char_SKCKReason       String? @default("None") @db.VarChar(128)
+  Char_BPJS             Int?    @default(0)
+  Char_BPJSTime         BigInt? @default(0)
+  Char_BPJSLevel        String? @default("None") @db.VarChar(128)
+  Char_Twitter          Int?    @default(0)
+  Char_TwitterName      String? @default("None") @db.VarChar(128)
+  Char_TwitterPassword  String? @default("") @db.VarChar(128)
+  Char_DelayTrashmaster Int?    @default(0)
+  Char_SweeperDelay     Int?    @default(0)
+  Char_DeliveryDelay    Int?    @default(0)
+  Char_ForkliftDelay    Int?    @default(0)
+  Char_BusDelay         Int?    @default(0)
+  Char_UCP              String? @db.VarChar(22)
+}
+
+model player_factionvehicle {
+  vID            Int    @id @default(autoincrement())
+  PFVeh_OwnerID  Int?   @default(-1)
+  PFVeh_ModelID  Int?   @default(0)
+  PFVeh_PosX     Float? @default(0) @db.Float
+  PFVeh_PosY     Float? @default(0) @db.Float
+  PFVeh_PosZ     Float? @default(0) @db.Float
+  PFVeh_PosA     Float? @default(0) @db.Float
+  PFVeh_Health   Float? @default(0) @db.Float
+  PFVeh_Fuel     Int?   @default(0)
+  PFVeh_Interior Int?   @default(0)
+  PFVeh_World    Int?   @default(0)
+  PFVeh_Damage0  Int?   @default(0)
+  PFVeh_Damage1  Int?   @default(0)
+  PFVeh_Damage2  Int?   @default(0)
+  PFVeh_Damage3  Int?   @default(0)
+  PFVeh_Color1   Int?   @default(0)
+  PFVeh_Color2   Int?   @default(0)
+  PFVeh_Faction  Int?   @default(0)
+  PFVeh_DCTime   Int?   @default(0)
+}
+
+model player_gudang {
+  ID           Int?    @default(0)
+  itemID       Int     @id @default(autoincrement())
+  itemName     String? @db.VarChar(32)
+  itemModel    Int?    @default(0)
+  itemQuantity Int?    @default(0)
+}
+
+model player_housestorage {
+  ID             Int?    @default(0)
+  hsItemID       Int     @id @default(autoincrement())
+  hsItemName     String? @db.VarChar(32)
+  hsItemModel    Int?    @default(0)
+  hsItemQuantity Int?    @default(0)
+}
+
+model player_rusunstorage {
+  ID             Int?    @default(0)
+  rsItemID       Int     @id @default(autoincrement())
+  rsItemName     String? @db.VarChar(32)
+  rsItemModel    Int?    @default(0)
+  rsItemQuantity Int?    @default(0)
+}
+
+model player_vehicles {
+  id                   Int      @id @default(autoincrement()) @db.UnsignedInt
+  PVeh_OwnerID         Int?     @default(-1)
+  PVeh_ModelID         Int?     @default(0)
+  PVeh_Color1          Int?     @default(0)
+  PVeh_Color2          Int?     @default(0)
+  PVeh_Paintjob        Int?     @default(-1)
+  PVeh_Neon            Int?     @default(0)
+  PVeh_Locked          Int?     @default(0)
+  PVeh_Plate           String   @default("None") @db.VarChar(50)
+  PVeh_PlateTime       BigInt?  @default(0)
+  PVeh_PlateOwned      Int?     @default(0)
+  PVeh_Price           Int?     @default(200000)
+  PVeh_Health          Float?   @default(1000) @db.Float
+  PVeh_Fuel            Int?     @default(100)
+  PVeh_PosX            Float?   @default(0) @db.Float
+  PVeh_PosY            Float?   @default(0) @db.Float
+  PVeh_PosZ            Float?   @default(0) @db.Float
+  PVeh_PosA            Float?   @default(0) @db.Float
+  PVeh_Interior        Int?     @default(0)
+  PVeh_World           Int?     @default(0)
+  PVeh_Damage0         Int?     @default(0)
+  PVeh_Damage1         Int?     @default(0)
+  PVeh_Damage2         Int?     @default(0)
+  PVeh_Damage3         Int?     @default(0)
+  PVeh_Mod0            Int?     @default(0)
+  PVeh_Mod1            Int?     @default(0)
+  PVeh_Mod2            Int?     @default(0)
+  PVeh_Mod3            Int?     @default(0)
+  PVeh_Mod4            Int?     @default(0)
+  PVeh_Mod5            Int?     @default(0)
+  PVeh_Mod6            Int?     @default(0)
+  PVeh_Mod7            Int?     @default(0)
+  PVeh_Mod8            Int?     @default(0)
+  PVeh_Mod9            Int?     @default(0)
+  PVeh_Mod10           Int?     @default(0)
+  PVeh_Mod11           Int?     @default(0)
+  PVeh_Mod12           Int?     @default(0)
+  PVeh_Mod13           Int?     @default(0)
+  PVeh_Mod14           Int?     @default(0)
+  PVeh_Mod15           Int?     @default(0)
+  PVeh_Mod16           Int?     @default(0)
+  PVeh_LockTire        Int?     @default(0)
+  PVeh_EngineUpgrade   Int?     @default(0)
+  PVeh_BodyUpgrade     Int?     @default(0)
+  PVeh_BodyRepair      Float?   @default(0) @db.Float
+  PVeh_Weapon1         Int?     @default(0)
+  PVeh_Weapon2         Int?     @default(0)
+  PVeh_Weapon3         Int?     @default(0)
+  PVeh_Ammo1           Int?     @default(0)
+  PVeh_Ammo2           Int?     @default(0)
+  PVeh_Ammo3           Int?     @default(0)
+  PVeh_Rental          Int?     @default(-1)
+  PVeh_RentTime        BigInt?  @default(0)
+  PVeh_Parked          Int?     @default(-1)
+  PVeh_Broken          Boolean? @default(false)
+  PVeh_Insuranced      Int?     @default(0)
+  PVeh_Faction         Int?     @default(0)
+  PVeh_Donation        Int?     @default(0)
+  PVeh_DCTime          BigInt?  @default(0)
+  PVeh_Impounded       Int?     @default(0)
+  PVeh_ImpoundedTime   BigInt?  @default(0)
+  PVeh_ImpoundedPrice  Int?     @default(0)
+  PVeh_ImpoundedReason String?  @default("-") @db.VarChar(128)
+  PVeh_Housed          Int?     @default(-1)
+  PVeh_Helipad         Int?     @default(-1)
+  PVeh_Families        Int?     @default(-1)
+  PVeh_FactionGarage   Int?     @default(-1)
+  PVeh_Capacity        Float?   @default(0) @db.Float
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model playerlogs {
+  Name     String? @db.VarChar(50)
+  UCP      String? @db.VarChar(50)
+  Activity String? @db.VarChar(320)
+  Value    Int?    @default(0)
+  Time     String? @db.VarChar(320)
+
+  @@ignore
+}
+
+model polisi_brankas {
+  PID      Int?   @default(0)
+  ID       Int    @id @default(autoincrement())
+  Item     String @default("-") @db.VarChar(64)
+  Model    Int?   @default(0)
+  Quantity Int?   @default(0)
+}
+
+model public_garage {
+  pgID       Int     @id
+  pgName     String? @default("N/A") @db.VarChar(64)
+  pgPosX     Float?  @default(0) @db.Float
+  pgPosY     Float?  @default(0) @db.Float
+  pgPosZ     Float?  @default(0) @db.Float
+  pgSpawnX   Float?  @default(0) @db.Float
+  pgSpawnY   Float?  @default(0) @db.Float
+  pgSpawnZ   Float?  @default(0) @db.Float
+  pgSpawnA   Float?  @default(0) @db.Float
+  pgInterior Int     @default(0)
+  pgWorld    Int     @default(0)
+}
+
+model reports {
+  ID       Int    @id @default(autoincrement())
+  Reporter String @db.VarChar(24)
+  Reason   String @db.VarChar(200)
+  Date     String @db.VarChar(30)
+  Accepted Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model robbery {
+  RobberyID       Int?
+  RobberyX        Float? @default(0) @db.Float
+  RobberyY        Float? @default(0) @db.Float
+  RobberyZ        Float? @default(0) @db.Float
+  RobberyRX       Float? @default(0) @db.Float
+  RobberyRY       Float? @default(0) @db.Float
+  RobberyRZ       Float? @default(0) @db.Float
+  RobberyInterior Int?   @default(0)
+  RobberyWorld    Int?   @default(0)
+
+  @@ignore
+}
+
+model slotmachine {
+  ID       Int    @id
+  PosX     Float? @db.Float
+  PosY     Float? @db.Float
+  PosZ     Float? @db.Float
+  RotX     Float? @db.Float
+  RotY     Float? @db.Float
+  RotZ     Float? @db.Float
+  Interior Int?
+  World    Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model socket {
+  SocketID Int?
+  SocketX  Float? @db.Float
+  SocketY  Float? @db.Float
+  SocketZ  Float? @db.Float
+  SocketA  Float? @db.Float
+  Interior Int?
+  World    Int?
+
+  @@ignore
+}
+
+model speedcameras {
+  speedID    Int    @id @default(autoincrement())
+  speedRange Float? @default(0) @db.Float
+  speedLimit Float? @default(0) @db.Float
+  speedX     Float? @default(0) @db.Float
+  speedY     Float? @default(0) @db.Float
+  speedZ     Float? @default(0) @db.Float
+  speedAngle Float? @default(0) @db.Float
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model stuffs {
+  ID                   Int?    @default(0)
+  policemoneyvault     Int?    @default(0)
+  pemerintahmoneyvault Int?    @default(0)
+  emsmoneyvault        Int?    @default(0)
+  bengkelmoneyvault    Int?    @default(0)
+  restomoneyvault      Int?    @default(0)
+  gojekmoneyvault      Int?    @default(0)
+  transmoneyvault      Int?    @default(0)
+  globaltime_rusun     BigInt? @default(0)
+  ShowroomStock        Int?    @default(0)
+  CraftingPassword     String? @default("N/A") @db.VarChar(128)
+
+  @@ignore
+}
+
+model tags {
+  tagId       Int     @id @default(autoincrement())
+  tagText     String? @db.VarChar(64)
+  tagFont     String? @db.VarChar(24)
+  tagCreated  String? @db.VarChar(24)
+  tagColor    Int?    @db.UnsignedInt
+  tagFontsize Int?    @db.UnsignedInt
+  tagBold     Int?    @db.UnsignedInt
+  tagOwner    Int?    @db.UnsignedInt
+  tagPosx     Float?  @db.Float
+  tagPosy     Float?  @db.Float
+  tagPosz     Float?  @db.Float
+  tagRotx     Float?  @db.Float
+  tagRoty     Float?  @db.Float
+  tagRotz     Float?  @db.Float
+  tagExpired  Int?    @default(0)
+}
+
+model toys {
+  Id           Int     @id @default(autoincrement())
+  Owner        String? @default("") @db.VarChar(40)
+  Slot0_Model  Int?    @default(0)
+  Slot0_Bone   Int?    @default(0)
+  Slot0_Status Int?    @default(0)
+  Slot0_XPos   Float?  @default(0) @db.Float
+  Slot0_YPos   Float?  @default(0) @db.Float
+  Slot0_ZPos   Float?  @default(0) @db.Float
+  Slot0_XRot   Float?  @default(0) @db.Float
+  Slot0_YRot   Float?  @default(0) @db.Float
+  Slot0_ZRot   Float?  @default(0) @db.Float
+  Slot0_XScale Float?  @default(0) @db.Float
+  Slot0_YScale Float?  @default(0) @db.Float
+  Slot0_ZScale Float?  @default(0) @db.Float
+  Slot1_Model  Int?    @default(0)
+  Slot1_Bone   Int?    @default(0)
+  Slot1_Status Int?    @default(0)
+  Slot1_XPos   Float?  @default(0) @db.Float
+  Slot1_YPos   Float?  @default(0) @db.Float
+  Slot1_ZPos   Float?  @default(0) @db.Float
+  Slot1_XRot   Float?  @default(0) @db.Float
+  Slot1_YRot   Float?  @default(0) @db.Float
+  Slot1_ZRot   Float?  @default(0) @db.Float
+  Slot1_XScale Float?  @default(0) @db.Float
+  Slot1_YScale Float?  @default(0) @db.Float
+  Slot1_ZScale Float?  @default(0) @db.Float
+  Slot2_Model  Int?    @default(0)
+  Slot2_Bone   Int?    @default(0)
+  Slot2_Status Int?    @default(0)
+  Slot2_XPos   Float?  @default(0) @db.Float
+  Slot2_YPos   Float?  @default(0) @db.Float
+  Slot2_ZPos   Float?  @default(0) @db.Float
+  Slot2_XRot   Float?  @default(0) @db.Float
+  Slot2_YRot   Float?  @default(0) @db.Float
+  Slot2_ZRot   Float?  @default(0) @db.Float
+  Slot2_XScale Float?  @default(0) @db.Float
+  Slot2_YScale Float?  @default(0) @db.Float
+  Slot2_ZScale Float?  @default(0) @db.Float
+  Slot3_Model  Int?    @default(0)
+  Slot3_Bone   Int?    @default(0)
+  Slot3_Status Int?    @default(0)
+  Slot3_XPos   Float?  @default(0) @db.Float
+  Slot3_YPos   Float?  @default(0) @db.Float
+  Slot3_ZPos   Float?  @default(0) @db.Float
+  Slot3_XRot   Float?  @default(0) @db.Float
+  Slot3_YRot   Float?  @default(0) @db.Float
+  Slot3_ZRot   Float?  @default(0) @db.Float
+  Slot3_XScale Float?  @default(0) @db.Float
+  Slot3_YScale Float?  @default(0) @db.Float
+  Slot3_ZScale Float?  @default(0) @db.Float
+}
+
+model trans_brankas {
+  PID      Int?   @default(0)
+  ID       Int    @id @default(autoincrement())
+  Item     String @default("-") @db.VarChar(64)
+  Model    Int?   @default(0)
+  Quantity Int?   @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model transferlogs {
+  pID          Int
+  Type         Int
+  Value        Int
+  TargetSender String @default("") @db.VarChar(32)
+  Date         String @default("") @db.VarChar(64)
+
+  @@ignore
+}
+
+model trash {
+  ID       Int    @id
+  Model    Int?   @default(0)
+  Cooldown Int?   @default(0)
+  Interior Int?   @default(0)
+  World    Int?   @default(0)
+  PosX     Float? @default(0) @db.Float
+  PosY     Float? @default(0) @db.Float
+  PosZ     Float? @default(0) @db.Float
+  RotX     Float? @default(0) @db.Float
+  RotY     Float? @default(0) @db.Float
+  RotZ     Float? @default(0) @db.Float
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tweetlogs {
+  Name String? @default("None") @db.VarChar(32)
+  UCP  String? @default("None") @db.VarChar(64)
+  Text String? @default("None") @db.VarChar(128)
+  Time String? @default("None") @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tweets {
+  ID          Int?    @default(1)
+  TwitterFrom String  @default("-") @db.VarChar(64)
+  TwitterDate String? @default("-") @db.VarChar(64)
+  TwitterText String? @default("-") @db.VarChar(128)
+
+  @@ignore
+}
+
+model uranium {
+  ID        Int    @id
+  UraniumX  Float? @db.Float
+  UraniumY  Float? @db.Float
+  UraniumZ  Float? @db.Float
+  UraniumRX Float? @db.Float
+  UraniumRY Float? @db.Float
+  UraniumRZ Float? @db.Float
+  Interior  Int?   @default(0) @db.TinyInt
+  World     Int?   @default(0) @db.TinyInt
+  Timer     Int?   @default(0)
+}
+
+model vehicle_bagasi {
+  vID      Int?   @default(0)
+  ID       Int    @id @default(autoincrement())
+  Item     String @default("-") @db.VarChar(64)
+  Model    Int?   @default(0)
+  Quantity Int?   @default(0)
+}
+
+model vehicle_object {
+  id        Int     @id @default(autoincrement())
+  model     Int?
+  toggle    Int?    @default(0)
+  color     String? @db.VarChar(24)
+  vehicle   Int?
+  type      Int?    @db.TinyInt
+  x         Float?  @db.Float
+  y         Float?  @db.Float
+  z         Float?  @db.Float
+  rx        Float?  @db.Float
+  ry        Float?  @db.Float
+  rz        Float?  @db.Float
+  text      String? @default("Unknowns") @db.VarChar(32)
+  font      String? @db.VarChar(24)
+  fontcolor Int?
+  fontsize  Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model voucher {
+  VoucherID   Int?
+  VoucherCode String? @db.VarChar(50)
+  VoucherFee  Int?    @default(0)
+  VoucherTime Int?    @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model warninglogs {
+  pID        Int?    @default(-1)
+  WarnType   Int?    @default(0)
+  WarnTime   BigInt? @default(0)
+  WarnSender String? @db.VarChar(64)
+  WarnReason String? @db.VarChar(64)
+
+  @@ignore
+}
+
+model warrants {
+  WarrantsID Int    @id @default(autoincrement())
+  ID         Int    @default(-1)
+  Date       String @default("N/A") @db.VarChar(64)
+  Reason     String @default("N/A") @db.VarChar(128)
+  Issuer     String @default("N/A") @db.VarChar(64)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model warung {
+  ShopID       Int?   @default(-1)
+  ShopX        Float? @default(0) @db.Float
+  ShopY        Float? @default(0) @db.Float
+  ShopZ        Float? @default(0) @db.Float
+  ShopInterior Int?
+  ShopWorld    Int?
+  ShopType     Int?   @default(0)
+
+  @@ignore
+}
+
+model weapon_factions {
+  Owner_ID Int
+  Slot     Int
+  Weapon   Int? @default(0)
+  Ammo     Int? @default(0)
+
+  @@id([Owner_ID, Slot])
+}
+
+model weaponsettings {
+  Owner    Int
+  WeaponID Int    @db.TinyInt
+  PosX     Float? @default(-0.116) @db.Float
+  PosY     Float? @default(0.189) @db.Float
+  PosZ     Float? @default(0.088) @db.Float
+  RotX     Float? @default(0) @db.Float
+  RotY     Float? @default(44.5) @db.Float
+  RotZ     Float? @default(0) @db.Float
+  Bone     Int?   @default(1) @db.TinyInt
+  Hidden   Int?   @default(0) @db.TinyInt
+
+  @@id([Owner, WeaponID])
+  @@unique([Owner, WeaponID], map: "Owner")
+}
+
+model weeds {
+  ID   Int    @id @default(autoincrement())
+  Type Int?   @default(0)
+  Time Int?   @default(0)
+  PosX Float? @default(0) @db.Float
+  PosY Float? @default(0) @db.Float
+  PosZ Float? @default(0) @db.Float
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model whatsapp_chats {
+  ID            Int?
+  chatTimestamp String? @default("-") @db.VarChar(64)
+  chatSender    String? @default("-") @db.VarChar(64)
+  chatMessage   String? @default("-") @db.VarChar(128)
+  SenderID      Int     @default(-1)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model yellowpages {
+  ID          Int?    @default(1)
+  YellowDate  String? @default("-") @db.VarChar(64)
+  YellowFrom  String? @default("-") @db.VarChar(64)
+  YellowPhone String? @default("-") @db.VarChar(64)
+  YellowText  String? @default("-") @db.VarChar(128)
+
+  @@ignore
+}

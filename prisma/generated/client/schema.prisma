@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// Existing table from the game database
+model PlayerUCP {
+  ID         Int     @id @default(autoincrement())
+  ucp        String? @unique @db.VarChar(22)
+  verifycode Int?    @default(0)
+  DiscordID  String? @default("") @db.VarChar(50)
+  password   String? @default("") @db.VarChar(64)
+  salt       String? @default("") @db.VarChar(16)
+  extrac     Int?    @default(0)
+  reedem     Int?    @default(0)
+
+  @@map("playerucp")
+}
+
+/// New table for web UCP
+model WebUCP {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("webucp")
+}
